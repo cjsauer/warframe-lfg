@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: clojure:tools-deps
+      - image: circleci/clojure:tools-deps-node-browsers
     steps:
       - checkout
 
