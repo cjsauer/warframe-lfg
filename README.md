@@ -107,7 +107,7 @@ hosting.
 [1]: https://www.oracle.com/technetwork/java/javase/downloads/index.html
 [2]: https://nodejs.org/en/
 [3]: https://yarnpkg.com/en/
-[4]: localhost:8000
+[4]: http://localhost:8000
 [5]: https://sass-lang.com/
 [6]: https://clojure.org/
 [7]: https://aws.amazon.com/s3/
