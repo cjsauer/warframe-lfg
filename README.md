@@ -9,6 +9,7 @@ There are only a few primary dependencies you'll need to have installed to devel
 on this project:
 
 - [Java JDK 8+][1]
+- [Clojure CLI][8]
 - [Node.js (LTS recommended)][2]
 - [Yarn package manager][3]
 
@@ -110,3 +111,4 @@ hosting.
 [5]: https://sass-lang.com/
 [6]: https://clojure.org/
 [7]: https://aws.amazon.com/s3/
+[8]: https://clojure.org/guides/getting_started
