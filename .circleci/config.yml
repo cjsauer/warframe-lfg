@@ -7,15 +7,32 @@ jobs:
       - checkout
 
       - restore_cache:
+          name: Restore Clojure Deps Cache
           keys:
             - v1-dependencies-{{ checksum "deps.edn" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
 
-      - run: ./bin/test-all.sh
+      - restore_cache:
+          name: Restore Yarn Package Cache
+          keys:
+            - yarn-packages-{{ checksum "yarn.lock" }}
+
+      - run:
+          name: Install Yarn Dependencies
+          command: yarn install --frozen-lockfile
 
       - save_cache:
-         paths:
-           - ~/.m2
-           - .cpcache
-         key: v1-dependencies-{{ checksum "deps.edn" }}
+          name: Save Yarn Package Cache
+          key: yarn-packages-{{ checksum "yarn.lock" }}
+          paths:
+            - ~/.cache/yarn
+
+      - run:
+          name: Run Clojure(Script) tests
+          command: ./bin/test-all.sh
+
+      - save_cache:
+          name: Save Clojure Deps Cache
+          key: v1-dependencies-{{ checksum "deps.edn" }}
+          paths:
+            - ~/.m2
+            - .cpcache
