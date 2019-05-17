@@ -1,8 +1,21 @@
- version: 2
- jobs:
-   build:
-     docker:
-       - image: clojure:tools-deps
-     steps:
-       - checkout
-       - run: ./bin/test-all.sh
+version: 2
+jobs:
+  build:
+    docker:
+      - image: clojure:tools-deps
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "deps.edn" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+
+      - run: ./bin/test-all.sh
+
+      - save_cache:
+         paths:
+           - ~/.m2
+           - .cpcache
+         key: v1-dependencies-{{ checksum "deps.edn" }}
