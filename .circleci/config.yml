@@ -1,43 +1,55 @@
-version: 2
+version: 2.1
+orbs:
+  aws-s3: circleci/aws-s3@1.0.9
 jobs:
   build:
     docker:
       - image: circleci/clojure:tools-deps-node-browsers
     steps:
+
+      # Install
       - checkout
-
       - restore_cache:
-          name: Restore Clojure Deps Cache
-          keys:
-            - v1-dependencies-{{ checksum "deps.edn" }}
-
-      - restore_cache:
-          name: Restore Yarn Package Cache
+          name: Restore deps caches
           keys:
             - yarn-packages-{{ checksum "yarn.lock" }}
-
+            - v1-dependencies-{{ checksum "deps.edn" }}
       - run:
-          name: Install Yarn Dependencies
+          name: Install NPM Dependencies
           command: yarn install --frozen-lockfile
 
-      - save_cache:
-          name: Save Yarn Package Cache
-          key: yarn-packages-{{ checksum "yarn.lock" }}
-          paths:
-            - ~/.cache/yarn
-
+      # Build
+      - run:
+          name: Compile SCSS into CSS
+          command: ./bin/compile-scss.sh
       - run:
           name: Build the ClojureScript app with advanced optimizations
           command: yarn shadow-cljs release app
 
+
+      # Test
       - run:
           name: Run Clojure(Script) tests
           command: ./bin/test-all.sh
 
-      - run:
-          name: Compile SCSS into CSS
-          command: ./bin/compile-scss.sh
+      # Deploy (backend)
+      # TBD
 
+      # Deploy (frontend)
+      - aws-s3/sync:
+          from: resources/public
+          to: 's3://${S3_DEPLOY_BUCKET}-${CIRCLE_BRANCH}'
+          arguments: |
+            --acl public-read \
+            --cache-control "max-age=86400" \
+            --delete
+
+      # Cache deps for faster builds
+      - save_cache:
+          name: Save NPM Package Cache
+          key: yarn-packages-{{ checksum "yarn.lock" }}
+          paths:
+            - ~/.cache/yarn
       - save_cache:
           name: Save Clojure Deps Cache
           key: v1-dependencies-{{ checksum "deps.edn" }}
