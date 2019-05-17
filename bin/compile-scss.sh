@@ -1,4 +1,4 @@
-#!/user/bin/env bash
+#!/usr/bin/env bash
 
 yarn sass \
      resources/scss/main.scss:resources/public/css/main.css \
