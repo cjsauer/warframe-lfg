@@ -27,6 +27,10 @@ jobs:
             - ~/.cache/yarn
 
       - run:
+          name: Build the ClojureScript app with advanced optimizations
+          command: yarn shadow-cljs release app
+
+      - run:
           name: Run Clojure(Script) tests
           command: ./bin/test-all.sh
 
