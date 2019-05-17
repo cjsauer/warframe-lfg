@@ -1,0 +1,6 @@
+node_modules/
+target/
+.shadow-cljs/
+.cpcache/
+.nrepl-port
+resources/public/js/app/

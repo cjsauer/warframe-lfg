@@ -1,0 +1,19 @@
+;; shadow-cljs configuration
+{
+ ;; read dependencies from deps.edn file
+ :deps {:aliases [:cljs :dev :test]}
+
+ :dev-http {8000 {:root    "resources/public"
+                  :handler warframe-lfg.app.main/handler}}
+
+ :nrepl {:middleware [refactor-nrepl.middleware/wrap-refactor]}
+
+ :builds
+ {:app {:target     :browser
+        :output-dir "resources/public/js/app"
+        :asset-path "js/app"
+        :modules    {:main {:entries [warframe-lfg.ui.main]
+                            :init-fn warframe-lfg.ui.main/start!}}}
+  :ci  {:target    :karma
+        :output-to "target/ci.js"
+        :ns-regexp "-test$"}}}

@@ -1,0 +1,17 @@
+{:paths ["src/main"]
+
+ :deps {org.clojure/clojure    {:mvn/version "1.10.1-beta3"}
+        juxt/crux              {:mvn/version "19.04-1.0.3-alpha"}
+        org.rocksdb/rocksdbjni {:mvn/version "5.17.2"}}
+
+ :aliases
+ {:cljs {:extra-deps {org.clojure/clojurescript {:mvn/version "1.10.520"}
+                      ;; org.arachne-framework/factui {:mvn/version "1.1.0-SNAPSHOT"}
+                      binaryage/devtools        {:mvn/version "0.9.10"}}}
+  :dev  {:extra-paths ["src/dev"]
+         :extra-deps  {cider/cider-nrepl {:mvn/version "0.21.1"}
+                       refactor-nrepl    {:mvn/version "0.2.4"}}}
+  :test {:extra-paths ["src/test"]
+         :extra-deps  {com.cognitect/test-runner
+                       {:git/url "https://github.com/cognitect-labs/test-runner.git"
+                        :sha     "209b64504cb3bd3b99ecfec7937b358a879f55c1"}}}}}
