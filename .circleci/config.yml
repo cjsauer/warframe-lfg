@@ -34,6 +34,10 @@ jobs:
           name: Run Clojure(Script) tests
           command: ./bin/test-all.sh
 
+      - run:
+          name: Compile SCSS into CSS
+          command: ./bin/compile-scss.sh
+
       - save_cache:
           name: Save Clojure Deps Cache
           key: v1-dependencies-{{ checksum "deps.edn" }}

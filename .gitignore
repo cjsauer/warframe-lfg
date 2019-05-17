@@ -3,4 +3,7 @@ target/
 .shadow-cljs/
 .cpcache/
 .nrepl-port
+
+# Build artifacts
 resources/public/js/app/
+resources/public/css/
