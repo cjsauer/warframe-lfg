@@ -33,7 +33,9 @@ jobs:
           command: ./bin/test-all.sh
 
       # Deploy (backend)
-      # TBD
+      - run:
+          name: Deploy datomic ions
+          command: clojure -A:dev:deploy
 
       # Deploy (frontend)
       - aws-s3/sync:

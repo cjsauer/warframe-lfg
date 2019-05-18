@@ -1,8 +1,9 @@
-{:paths ["src/main"]
+{:paths ["src/main" "resources"]
 
- :deps {org.clojure/clojure    {:mvn/version "1.10.1-beta3"}
-        juxt/crux              {:mvn/version "19.04-1.0.3-alpha"}
-        org.rocksdb/rocksdbjni {:mvn/version "5.17.2"}}
+ :mvn/repos {"datomic-cloud" {:url "s3://datomic-releases-1fc2183a/maven/releases"}}
+
+ :deps {org.clojure/clojure {:mvn/version "1.10.1-beta3"}
+        com.datomic/ion     {:mvn/version "0.9.34"}}
 
  :aliases
  {:cljs {:extra-deps {org.clojure/clojurescript {:mvn/version "1.10.520"}
@@ -10,10 +11,12 @@
                                                  :sha     "9222bdd2778c5413792d067b81f3506935e2cdaa"}
                       binaryage/devtools        {:mvn/version "0.9.10"}}}
   :dev  {:extra-paths ["src/dev"]
-         :extra-deps  {cider/cider-nrepl {:mvn/version "0.21.1"}
-                       refactor-nrepl    {:mvn/version "2.4.0"}}}
-  :test {:extra-paths ["src/test"]
-         :extra-deps  {com.cognitect/test-runner
-                       {:git/url "https://github.com/cognitect-labs/test-runner.git"
-                        :sha     "209b64504cb3bd3b99ecfec7937b358a879f55c1"}}}
-  :server {:main-opts ["-m" "warframe-lfg.app.main"]}}}
+         :extra-deps  {cider/cider-nrepl   {:mvn/version "0.21.1"}
+                       refactor-nrepl      {:mvn/version "2.4.0"}
+                       com.datomic/ion-dev {:mvn/version "0.9.229"}}}
+  :test   {:extra-paths ["src/test"]
+           :extra-deps  {com.cognitect/test-runner
+                         {:git/url "https://github.com/cognitect-labs/test-runner.git"
+                          :sha     "209b64504cb3bd3b99ecfec7937b358a879f55c1"}}}
+  :server {:main-opts ["-m" "warframe-lfg.app.main"]}
+  :deploy {:main-opts ["-m" "warframe-lfg.deploy"]}}}

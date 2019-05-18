@@ -1,0 +1,5 @@
+{:allow [warframe-lfg.app.main/handler]
+ :lambdas {:say-hello
+           {:fn warframe-lfg.app.main/handler
+            :description "Prints a friendly greeting"}}
+ :app-name "datomic-ions-stack"}

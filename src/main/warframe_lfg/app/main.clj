@@ -2,7 +2,7 @@
 
 (defn handler
   [req]
-  {:status 200 :body "OK"})
+  (println "Hello, world!"))
 
 (defn -main
   []
