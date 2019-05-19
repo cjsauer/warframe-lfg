@@ -15,7 +15,9 @@
                         uname (assoc :uname uname))
         pushed        (id/push config-map)
         group         (-> pushed :deploy-groups first)
-        deploy-config (assoc config-map :group group)
+        rev           (:rev pushed)
+        deploy-config (merge config-map {:group group
+                                         :rev   rev})
         deployed      (id/deploy deploy-config)]
     (loop [status (get-deploy-status deployed)]
       (case status
