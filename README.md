@@ -5,13 +5,15 @@ The best place to find Warframe teammates on the web.
 
 ## Development
 
-There are only a few primary dependencies you'll need to have installed to develop
-on this project:
+There are a few primary dependencies you'll need to have installed to develop on
+this project:
 
 - [Java JDK 8+][1]
 - [Clojure CLI][8]
 - [Node.js (LTS recommended)][2]
 - [Yarn package manager][3]
+- [AWS CLI][10]
+- [A running Datomic system][9]
 
 ### Running Locally
 
@@ -34,6 +36,16 @@ In a separate terminal, let's also watch [SCSS][5] files for changes:
 ```
 ./bin/watch-scss.sh
 ```
+
+Now for the backend, start up the SOCKS proxy to connect your local dev machine
+to the bastion host running in AWS:
+
+```
+./bin/datomic-socks-proxy -r us-east-1 datomic-ions-stack
+```
+
+Obviously you'll want to use the AWS region and name of your own running
+[Datomic system][9].
 
 With those commands running, you're ready to open your web browser to
 [localhost:8000][4].
@@ -58,6 +70,15 @@ cljs.user=> (js/alert "It worked!")
 
 You should see an alert box displaying `It worked!` in your browser.
 
+A Clojure REPL can be started in a similar fashion:
+
+```
+yarn shadow-cljs clj-repl
+```
+
+Visit the [Editor Integration][11] section of the shadow-cljs docs for
+information on integrating the REPLs into your editor of choice.
+
 ### Testing
 
 Tests can be run with:
@@ -81,29 +102,21 @@ yarn shadow-cljs release app
 ```
 
 This results in a fully prepared `resources/public/` directory, ready for
-hosting.
+hosting (e.g. from an S3 bucket).
 
-#### Standalone API Service
+### Deployment
 
-If you just need to run the API service alone, you can use the following:
-
-```
-clojure -A:server
-```
-
-You can test the API using `curl`:
+See the [.circleci/config.yml][12] for deployment steps. In a nutshell,
+we deploy the aformentioned `resources/public/` directory to an S3 bucket
+with public read access. Then, the [Ions][14] can be deployed with a single
+command:
 
 ```
-TBD
+clojure -A:dev:deploy
 ```
 
-Note that when using `yarn shadow-cljs watch app` the development server that is
-started already handles API calls in the same process that is watching and
-compiling source files. So, you only need to use this command when you want to
-run _only_ the API service (on a VM in production for example). Also be aware
-that this process does not serve static resources. These resources should be
-packaged and made available by a more appropriate service (e.g. [S3][7] or a
-CDN).
+This will push and deploy the [configured Ions][13] to the running Datomic
+system.
 
 [1]: https://www.oracle.com/technetwork/java/javase/downloads/index.html
 [2]: https://nodejs.org/en/
@@ -113,3 +126,9 @@ CDN).
 [6]: https://clojure.org/
 [7]: https://aws.amazon.com/s3/
 [8]: https://clojure.org/guides/getting_started
+[9]: https://docs.datomic.com/cloud/setting-up.html
+[10]: http://docs.aws.amazon.com/general/latest/gr/managing-aws-access-keys.html
+[11]: https://shadow-cljs.github.io/docs/UsersGuide.html#_editor_integration
+[12]: ./.circleci/config.yml
+[13]: ./resources/datomic/ion-config.edn
+[14]: https://docs.datomic.com/cloud/ions/ions.html
