@@ -5,6 +5,9 @@ target/
 .nrepl-port
 \.#*
 
+# Convenient place to source env vars
+.profile
+
 # Build artifacts
 resources/public/js/app/
 resources/public/css/
