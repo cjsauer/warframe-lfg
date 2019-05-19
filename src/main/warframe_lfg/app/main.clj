@@ -2,7 +2,7 @@
 
 (defn handler
   [req]
-  (println "Hello, world!"))
+  "Hello, World!")
 
 (defn -main
   []
