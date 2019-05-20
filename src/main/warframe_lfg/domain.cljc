@@ -1,5 +1,5 @@
 (ns warframe-lfg.domain
-  (:require [clojure.string :as str]
+  (:require [clojure.string :as cstr]
             [clojure.spec.alpha :as s]))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -50,11 +50,72 @@
 (s/def :post/body ::non-empty-string)
 (s/def :post/deleted? boolean?)
 (s/def :post/expiration-instant inst?)
+
 (s/def :post/hashtag (s/keys :req [:hashtag/value]))
 (s/def :post/hashtags (s/coll-of :post/hashtag :into #{}))
-
+(def hashtag-regex #"\B#\w*[a-zA-Z]+\w*")
 (s/def :hashtag/value (s/and string?
-                             #(str/starts-with? % "#")
-                             #(re-matches #"\S*" %)
-                             #(<= 2 (count %))
-                             (s/conformer str/lower-case)))
+                             #(re-matches hashtag-regex %)
+                             (s/conformer cstr/lower-case)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Transformations
+
+(defn extract-hashtags
+  "Extracts the hashtags contained within the given string, preserving order."
+  [s]
+  (re-seq hashtag-regex s))
+
+(defn normalize-hashtag
+  "Normalizes a hashtag. For example #WarFrame becomes #warframe."
+  [htag]
+  (s/conform :hashtag/value htag))
+
+(defn normalize-all-hashtags
+  "Maps `normalize-hashtag` over the given collection."
+  [htag-coll]
+  (map normalize-hashtag htag-coll))
+
+(defn hashtag=
+  "Equality for hashtags. Performs normalization before comparing."
+  ([htag1] true)
+  ([htag1 htag2]
+   (= (normalize-hashtag htag1)
+      (normalize-hashtag htag2)))
+  ([htag1 htag2 & htags]
+   (apply =
+          (normalize-hashtag htag1)
+          (normalize-hashtag htag2)
+          (normalize-all-hashtags htags))))
+
+(defn post-hashtags
+  "Returns the set of hashtags contained within the given post's body."
+  [post]
+  (extract-hashtags (:post/body post)))
+
+(defn now
+  "Returns the current instant."
+  []
+  #?(:clj (java.util.Date.)
+     :cljs (js/Date.)))
+
+(defn post-expired?
+  "Returns true if the given post's expiration date tests less than `now`."
+  [now post]
+  (< (:post/expiration-instant post) now))
+
+
+(comment
+  (let [body "Looking for 2 to #raid the #GoblinCamp, using #Oberon! #1234 I can #se33 clearly now"]
+    (-> body
+        extract-hashtags
+        normalize-all-hashtags))
+
+  (hashtag= "#oberon" "#Oberon" "#OBERON")
+
+  (let [t (now)]
+    (js/setTimeout
+     #(js/alert (post-expired? {:post/expiration-instant t}))
+     1000))
+
+  )
