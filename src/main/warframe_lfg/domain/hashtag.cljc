@@ -8,9 +8,14 @@
   (cstr/lower-case htag))
 
 (defn normalize-all
-  "Maps `normalize` over the given collection."
+  "Maps `normalize` over the given hashtag collection."
   [htag-coll]
   (map normalize htag-coll))
+
+(defn normalized-set
+  "Returns the set of normalized hashtags from the given collection"
+  [htag-coll]
+  (into #{} (map normalize) htag-coll))
 
 (defn =
   "Equality for hashtags. Performs normalization before comparing."

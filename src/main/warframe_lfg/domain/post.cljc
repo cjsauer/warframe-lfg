@@ -1,10 +1,10 @@
 (ns warframe-lfg.domain.post
   (:require [warframe-lfg.domain :as lfg]))
 
-(defn- extract-hashtags
+(defn extract-hashtags
   "Extracts the hashtags contained within the given string, preserving order."
   [s]
-  (re-seq hashtag-regex s))
+  (re-seq lfg/hashtag-regex s))
 
 (defn hashtags
   "Returns the set of hashtags contained within the given post's body."

@@ -26,7 +26,7 @@
     :db/cardinality :db.cardinality/one
     :db/doc         "The instant in time after which this post is considered expired"}
 
-   {:db/ident       :post/hashtag
+   {:db/ident       :post/hashtags
     :db/valueType   :db.type/ref
     :db/cardinality :db.cardinality/many
     :db/doc         "One-to-many relationship between a post and the hashtags it contains"}
@@ -52,6 +52,6 @@
 (s/def :post/expiration-instant inst?)
 
 (def hashtag-regex #"\B#\w*[a-zA-Z]+\w*")
-(s/def :post/hashtag (s/keys :req [:hashtag/value]))
-(s/def :post/hashtags (s/coll-of :post/hashtag :into #{}))
+(s/def :post/hashtags (s/keys :req [:hashtag/value]))
+(s/def :post/hashtagss (s/coll-of :post/hashtags :into #{}))
 (s/def :hashtag/value (s/and string? #(re-matches hashtag-regex %)))
