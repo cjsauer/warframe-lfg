@@ -5,7 +5,8 @@
             [factui.rum :as fr :refer [*results*]]
             [warframe-lfg.domain :as lfg]
             [warframe-lfg.domain.post :as post]
-            [warframe-lfg.domain.hashtag :as htag]))
+            [warframe-lfg.domain.hashtag :as htag]
+            [clojure.spec.alpha :as s]))
 
 (defn make-hashtag
   [ht]
@@ -16,9 +17,9 @@
   [_ :global/posts ?p]
   [?p :post/body ?body]
   =>
-  (f/transact! [{:db/id ?p
-                 :post/hashtags
-                 (map make-hashtag (post/extract-hashtags ?body))}]))
+  (when-let [hashtags (seq (map make-hashtag (post/extract-hashtags ?body)))]
+    (f/transact! [{:db/id ?p
+                   :post/hashtags hashtags}])))
 
 (f/defquery all-posts-q
   [:find ?uuid ?body
@@ -78,9 +79,10 @@
   (let [[?post ?body] (first *results*)
         change #(fr/transact! app-state [{:db/id ?post
                                           :post/body (-> % .-target .-value)}])
-        save #(fr/transact! app-state [{:db/ident :global
-                                        :global/posts ?post
-                                        :global/wip-post (make-wip-post)}])]
+        save #(when (s/valid? :post/body ?body)
+                (fr/transact! app-state [{:db/ident :global
+                                          :global/posts ?post
+                                          :global/wip-post (make-wip-post)}]))]
     [:div.post-editor
      [:textarea {:id "wip-post-body"
                  :value (or ?body "")
@@ -103,7 +105,6 @@
                         (fr/mixin all-hashtags-q)
   [app-state]
   (let [hashtags (htag/normalized-set *results*)]
-    (println *results*)
     [:div.hashtag-list-container
      [:h2 "Hashtags Used"]
      [:ul.hashtag-list
