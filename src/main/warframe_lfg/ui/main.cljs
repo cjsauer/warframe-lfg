@@ -88,7 +88,7 @@
                  :value (or ?body "")
                  :on-change change}]
      [:button {:id "new-post!"
-               :on-click #(do (save))}
+               :on-click save}
       "Post!"]]))
 
 (rum/defc PostList < rum/static
