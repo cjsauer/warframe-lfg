@@ -4,6 +4,7 @@ target/
 .cpcache/
 .nrepl-port
 \.#*
+\.DS_Store
 
 # Convenient place to source env vars
 .profile

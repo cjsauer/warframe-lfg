@@ -12,7 +12,14 @@
 
 (rum/defc Root
   []
-  [:h1 "Warframe LFG coming"])
+  [:div.container
+   [:div.post-editor
+    [:textarea {:id "new-post-body"}]
+    [:button {:id "new-post!"} "Create post"]]
+   [:div.post-list-container
+    [:h2 "Latest Posts"]
+    [:ul.post-list
+     [:li.post-body "This is a post"]]]])
 
 (defn ^:dev/after-load start!
   []
