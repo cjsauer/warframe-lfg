@@ -1,6 +1,5 @@
 (ns warframe-lfg.domain-test
-  (:require #?@(:clj [[clojure.test :refer [deftest is testing]]]
-                :cljs [[clojure.test :refer-macros [deftest is testing]]])
+  (:require [clojure.test :refer [deftest is testing]]
             [warframe-lfg.domain :as wf]
             [warframe-lfg.domain.post :as post]
             [warframe-lfg.domain.hashtag :as htag]))
