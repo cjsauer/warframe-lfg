@@ -104,11 +104,11 @@
   [app-state]
   (let [hashtags (htag/normalized-set *results*)]
     (println *results*)
-    [:div.post-list-container
+    [:div.hashtag-list-container
      [:h2 "Hashtags Used"]
-     [:ul.post-list
+     [:ul.hashtag-list
       (for [ht hashtags]
-        [:li.post-body {:key ht} ht])]]))
+        [:li.hashtag {:key ht} ht])]]))
 
 (rum/defc Root < rum/static
   [app-state]
