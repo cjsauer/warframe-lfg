@@ -5,7 +5,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Schema
 
-(def attributes
+(def schema
   [{:db/ident       :post/uuid
     :db/unique      :db.unique/identity
     :db/valueType   :db.type/uuid

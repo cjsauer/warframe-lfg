@@ -1,6 +1,24 @@
 (ns warframe-lfg.ui.main
-  (:require [warframe-lfg.domain :as domain]))
+  (:require [rum.core :as rum]
+            [warframe-lfg.domain :as domain]
+            [factui.api :as f :include-macros true]
+            [factui.rum :as fr]
+            [warframe-lfg.domain :as lfg]))
 
-(defn start!
+(f/rulebase rulebase)
+
+(def initial-data
+  [])
+
+(rum/defc Root
   []
-  (println "We're okay!"))
+  [:h1 "Warframe LFG coming"])
+
+(defn ^:dev/after-load start!
+  []
+  (let [dom-root (.getElementById js/document "mount")
+        mount (fn [app-state]
+                (rum/mount ((deref #'Root) app-state)
+                           dom-root))
+        app-state (fr/initialize #'rulebase lfg/schema mount)]
+    #_(fr/transact! app-state initial-data)))
