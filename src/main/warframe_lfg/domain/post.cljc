@@ -1,5 +1,5 @@
 (ns warframe-lfg.domain.post
-  (:require [cljs.spec.alpha :as s]
+  (:require [clojure.spec.alpha :as s]
             [warframe-lfg.domain :as domain]
             [warframe-lfg.util :as util]))
 
