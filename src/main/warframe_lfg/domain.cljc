@@ -46,12 +46,12 @@
 
 (s/def ::non-empty-string (s/and string? not-empty))
 
+(def hashtag-regex #"\B#\w*[a-zA-Z]+\w*")
+(s/def ::hashtag (s/keys :req [:hashtag/value]))
+(s/def :hashtag/value (s/and string? #(re-matches hashtag-regex %)))
+
 (s/def :post/uuid uuid?)
 (s/def :post/body ::non-empty-string)
 (s/def :post/deleted? boolean?)
 (s/def :post/expiration-instant inst?)
-
-(def hashtag-regex #"\B#\w*[a-zA-Z]+\w*")
-(s/def :post/hashtags (s/keys :req [:hashtag/value]))
-(s/def :post/hashtagss (s/coll-of :post/hashtags :into #{}))
-(s/def :hashtag/value (s/and string? #(re-matches hashtag-regex %)))
+(s/def :post/hashtags (s/coll-of ::hashtag))

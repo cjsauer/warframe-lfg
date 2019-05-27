@@ -8,8 +8,9 @@
  :aliases
  {:cljs   {:extra-deps {org.clojure/clojurescript {:mvn/version "1.10.520"}
                         rum                       {:mvn/version "0.11.3"}
+                        datascript                {:mvn/version "0.18.3"}
                         cjsauer/factui            {:git/url "https://github.com/cjsauer/factui.git"
-                                                   :sha     "5b6f72f3528a58cea1db9adeaf9e02a70708e97d"}
+                                                   :sha     "8ec544259f90c8414315fa6edd326bf492424100"}
                         binaryage/devtools        {:mvn/version "0.9.10"}}}
   :dev    {:extra-paths ["src/dev"]
            :extra-deps  {cider/cider-nrepl   {:mvn/version "0.21.1"}
