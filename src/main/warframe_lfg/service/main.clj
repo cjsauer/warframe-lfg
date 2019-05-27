@@ -1,4 +1,4 @@
-(ns warframe-lfg.app.main)
+(ns warframe-lfg.service.main)
 
 (defn handler
   [req]

@@ -4,7 +4,7 @@
  :deps {:aliases [:cljs :dev :test]}
 
  :dev-http {8000 {:root    "resources/public"
-                  :handler warframe-lfg.app.main/handler}}
+                  :handler warframe-lfg.service.main/handler}}
 
  :nrepl {:middleware [refactor-nrepl.middleware/wrap-refactor]}
 
