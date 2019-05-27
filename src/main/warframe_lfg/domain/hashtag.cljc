@@ -1,7 +1,6 @@
 (ns warframe-lfg.domain.hashtag
   (:refer-clojure :exclude [=])
-  (:require [clojure.spec.alpha :as s]
-            [clojure.string :as cstr]))
+  (:require [clojure.string :as cstr]))
 
 (defn normalize
   "Normalizes a hashtag. For example #WarFrame becomes #warframe."
@@ -29,10 +28,3 @@
           (normalize htag1)
           (normalize htag2)
           (normalize-all htags))))
-
-(defn from-str
-  "Creates a new hashtag map with the given string value. String
-  value must conform to `:warframe-lfg.domain/hashtag` spec."
-  [htag-str]
-  {:pre [(s/valid? :hashtag/value htag-str)]}
-  {:hashtag/value htag-str})

@@ -47,11 +47,20 @@
 (s/def ::non-empty-string (s/and string? not-empty))
 
 (def hashtag-regex #"\B#\w*[a-zA-Z]+\w*")
-(s/def ::hashtag (s/keys :req [:hashtag/value]))
 (s/def :hashtag/value (s/and string? #(re-matches hashtag-regex %)))
 
 (s/def :post/uuid uuid?)
 (s/def :post/body ::non-empty-string)
 (s/def :post/deleted? boolean?)
 (s/def :post/expiration-instant inst?)
-(s/def :post/hashtags (s/coll-of ::hashtag))
+(s/def :post/hashtag (s/keys :req [:hashtag/value]))
+(s/def :post/hashtags (s/coll-of :post/hashtag))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Fundamental transformations
+
+(defn extract-hashtags
+  "Returns a seq of the hashtag values contained within the given string,
+  preserving order."
+  [s]
+  (re-seq hashtag-regex s))

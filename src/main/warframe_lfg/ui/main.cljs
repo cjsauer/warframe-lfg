@@ -8,14 +8,15 @@
             [warframe-lfg.domain.post :as post]
             [datascript.core :as d]))
 
-(f/defrule extract-new-post-hashtags-rule
-  "Extract and transact hashtags whenever a new post is transacted"
+(f/defrule transact-new-post-hashtags-rule
+  "On new post creation, transact the hashtags contained within the post body
+  as :post/hashtags."
   [_ :global/posts ?p]
   [?p :post/body ?body]
   =>
-  (when-let [hashtags (->> ?body post/extract-hashtags (map htag/from-str) seq)]
+  (when-let [htag-ents (post/hashtag-entities-from-body ?body)]
     (f/transact! [{:db/id ?p
-                   :post/hashtags hashtags}])))
+                   :post/hashtags htag-ents}])))
 
 (f/defquery all-post-eids-q
   [:find [?p ...]
