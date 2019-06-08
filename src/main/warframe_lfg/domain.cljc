@@ -29,7 +29,7 @@
    {:db/ident       :post/hashtags
     :db/valueType   :db.type/ref
     :db/cardinality :db.cardinality/many
-    :db/doc         "One-to-many relationship between a post and the hashtags it contains"}
+    :db/doc         "Many-to-many relationship between a post and the hashtags it contains"}
 
    {:db/ident       :hashtag/value
     :db/unique      :db.unique/identity
